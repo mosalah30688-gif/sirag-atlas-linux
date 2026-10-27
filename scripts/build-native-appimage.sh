@@ -62,8 +62,9 @@ cp linux/com.sirag.atlas.seerah.appdata.xml "$APPDIR/usr/share/metainfo/com.sira
 cat > "$APPDIR/AppRun" << 'APPRUN_EOF'
 #!/usr/bin/env bash
 HERE="$(dirname "$(readlink -f "${0}")")"
-export LD_LIBRARY_PATH="$HERE/usr/lib:${LD_LIBRARY_PATH}"
-if [ -z "${QT_QPA_PLATFORM}" ]; then
+export SIRAG_HOST_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}"
+export LD_LIBRARY_PATH="$HERE/usr/lib:${LD_LIBRARY_PATH:-}"
+if [ -z "${QT_QPA_PLATFORM:-}" ]; then
   export QT_QPA_PLATFORM="xcb;wayland"
 fi
 exec "$HERE/usr/bin/sirag-atlas-seerah" "$@"

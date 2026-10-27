@@ -1,6 +1,9 @@
 import json
 import os
+import shutil
+import subprocess
 import sys
+import threading
 import datetime
 from pathlib import Path
 
@@ -9,6 +12,100 @@ def resource_path(rel_path: str) -> str:
     """Resolve bundled asset path in both source mode and PyInstaller AppImage binary."""
     base = getattr(sys, "_MEIPASS", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
     return os.path.join(base, rel_path)
+
+
+def open_external_url(url: str) -> bool:
+    """
+    Reliably open an external URL in the user's default Linux desktop browser,
+    stripping AppImage/PyInstaller runtime overrides (LD_LIBRARY_PATH, QT_PLUGIN_PATH, etc.)
+    so host browsers & xdg-open never fail with library symbol mismatches.
+    """
+    if not url:
+        return False
+
+    clean_env = os.environ.copy()
+
+    # Restore original host LD_LIBRARY_PATH (saved by AppRun before mounting bundled libs)
+    orig_ld = clean_env.pop("SIRAG_HOST_LD_LIBRARY_PATH", None)
+    if orig_ld:
+        clean_env["LD_LIBRARY_PATH"] = orig_ld
+    else:
+        clean_env.pop("LD_LIBRARY_PATH", None)
+
+    for var in (
+        "LD_PRELOAD",
+        "QT_PLUGIN_PATH",
+        "QT_QPA_PLATFORM_PLUGIN_PATH",
+        "QML2_IMPORT_PATH",
+        "PYTHONPATH",
+        "PYTHONHOME",
+        "GIO_MODULE_DIR",
+        "GSETTINGS_SCHEMA_DIR",
+        "GTK_PATH",
+        "GTK_EXE_PREFIX",
+        "GTK_DATA_PREFIX",
+        "GDK_PIXBUF_MODULE_FILE",
+        "GDK_PIXBUF_MODULEDIR",
+        "PERLLIB",
+    ):
+        clean_env.pop(var, None)
+
+    # Ensure XDG_DATA_DIRS doesn't point exclusively inside temporary /tmp/.mount_* AppImage dir
+    xdg_dirs = clean_env.get("XDG_DATA_DIRS", "")
+    if ".mount_" in xdg_dirs:
+        kept = [p for p in xdg_dirs.split(":") if p and ".mount_" not in p]
+        clean_env["XDG_DATA_DIRS"] = ":".join(kept) if kept else "/usr/local/share:/usr/share"
+
+    def _launch_runner():
+        candidates = []
+        if shutil.which("xdg-open"):
+            candidates.append(["xdg-open", url])
+        if shutil.which("gio"):
+            candidates.append(["gio", "open", url])
+        for br in (
+            "x-www-browser",
+            "sensible-browser",
+            "google-chrome",
+            "google-chrome-stable",
+            "brave-browser",
+            "chromium",
+            "chromium-browser",
+            "firefox",
+            "microsoft-edge",
+            "vivaldi",
+            "falkon",
+            "konqueror",
+            "epiphany",
+        ):
+            exe = shutil.which(br)
+            if exe:
+                candidates.append([exe, url])
+
+        for cmd in candidates:
+            try:
+                proc = subprocess.Popen(
+                    cmd,
+                    env=clean_env,
+                    stdin=subprocess.DEVNULL,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    start_new_session=True,
+                )
+                # For short-lived openers (xdg-open / gio), verify they didn't immediately exit with error
+                if os.path.basename(cmd[0]) in ("xdg-open", "gio"):
+                    try:
+                        rc = proc.wait(timeout=2.5)
+                        if rc == 0:
+                            return
+                        continue
+                    except subprocess.TimeoutExpired:
+                        return
+                return
+            except Exception:
+                continue
+
+    threading.Thread(target=_launch_runner, daemon=True).start()
+    return True
 
 
 HIJRI_MONTHS_AR = [

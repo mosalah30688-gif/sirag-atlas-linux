@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 from . import APP_NAME_AR, APP_VERSION, DEV_URL
 from .audio_engine import NativeAudioEngine
 from .dialogs import OmniSearchDialog, SettingsAndUpdaterDialog, UpdateCheckWorker, _compare_semver
-from .state import DataRepository, UserState, gregorian_to_hijri, resource_path
+from .state import DataRepository, UserState, gregorian_to_hijri, open_external_url, resource_path
 from .theme import build_stylesheet
 from .views_part1 import (
     AtlasView,
@@ -238,18 +238,27 @@ class SiragMainWindow(QMainWindow):
         self.v_constellation.jumpEvent.connect(self._on_jump_event)
         self.v_diwan.jumpEvent.connect(self._on_jump_event)
 
-        # 5. Official Developer Attribution Footer Bar
+        # 5. Official Developer Attribution Footer Bar ("عن المطور" + Button underneath)
         footer = QFrame()
         footer.setProperty("panel", "footer")
-        f_lay = QHBoxLayout(footer)
-        f_lay.setContentsMargins(16, 7, 16, 7)
-        f_lay.addStretch(1)
-        dev_btn = QPushButton("✨ تم التطوير بواسطة محمد صلاح عبد الخالق — زيارة الموقع ↗")
+        f_lay = QVBoxLayout(footer)
+        f_lay.setContentsMargins(16, 6, 16, 8)
+        f_lay.setSpacing(4)
+        about_lbl = QLabel("عن المطور")
+        about_lbl.setProperty("role", "subtitle")
+        about_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        f_lay.addWidget(about_lbl)
+
+        btn_row = QHBoxLayout()
+        btn_row.addStretch(1)
+        dev_btn = QPushButton("محمد صلاح عبد الخالق")
         dev_btn.setProperty("btn", "dev")
         dev_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        dev_btn.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(DEV_URL)))
-        f_lay.addWidget(dev_btn)
-        f_lay.addStretch(1)
+        dev_btn.setToolTip(DEV_URL)
+        dev_btn.clicked.connect(lambda: open_external_url(DEV_URL))
+        btn_row.addWidget(dev_btn)
+        btn_row.addStretch(1)
+        f_lay.addLayout(btn_row)
         main_lay.addWidget(footer)
 
         # Keyboard Shortcuts

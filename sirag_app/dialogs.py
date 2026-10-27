@@ -25,7 +25,7 @@ from PySide6.QtWidgets import (
 )
 
 from . import APP_VERSION, DEV_URL, REPO_SLUG
-from .state import resource_path
+from .state import open_external_url, resource_path
 
 
 def _compare_semver(a: str, b: str) -> int:
@@ -382,25 +382,21 @@ class SettingsAndUpdaterDialog(QDialog):
         a_lay.addLayout(amb_modes)
         lay.addWidget(amb_box)
 
-        # 4. Official Developer Attribution Card
+        # 4. Official Developer Attribution Card (Clean: "عن المطور" + Button underneath)
         dev_box = QFrame()
         dev_box.setProperty("panel", "glass")
         d_lay = QVBoxLayout(dev_box)
-        d_row = QHBoxLayout()
-        ic = QLabel()
-        ic_pix = QPixmap(resource_path("assets/icon-round.png")).scaled(
-            48, 48, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
-        )
-        ic.setPixmap(ic_pix)
-        d_row.addWidget(ic)
-        d_lbl = QLabel("حقوق التطوير والإعداد:\n✨ تم التطوير بواسطة محمد صلاح عبد الخالق")
-        d_lbl.setStyleSheet("font-weight: bold;")
-        d_row.addWidget(d_lbl, 1)
-        d_lay.addLayout(d_row)
+        d_lay.setSpacing(8)
+        d_hdr = QLabel("عن المطور")
+        d_hdr.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        d_hdr.setStyleSheet("font-weight: bold;")
+        d_lay.addWidget(d_hdr)
 
-        dev_btn = QPushButton("🌐 تم التطوير بواسطة محمد صلاح عبد الخالق — زيارة الموقع الرسمي ↗")
+        dev_btn = QPushButton("محمد صلاح عبد الخالق")
         dev_btn.setProperty("btn", "gold")
-        dev_btn.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(DEV_URL)))
+        dev_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        dev_btn.setToolTip(DEV_URL)
+        dev_btn.clicked.connect(lambda: open_external_url(DEV_URL))
         d_lay.addWidget(dev_btn)
         lay.addWidget(dev_box)
 
@@ -497,4 +493,4 @@ class SettingsAndUpdaterDialog(QDialog):
             )
         else:
             self.upd_status.setText(f"⚠️ تعذر التنزيل المباشر ({info}) — سيتم فتح الرابط في المتصفح.")
-            QDesktopServices.openUrl(QUrl(self._latest_dl_url))
+            open_external_url(self._latest_dl_url)

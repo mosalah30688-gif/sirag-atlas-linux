@@ -7,7 +7,7 @@
 
 **تطبيق سطح مكتب أصلي 100% لنظام لينكس (بدون Electron • بدون متصفح • بدون WebView) يعمل بالكامل أوفلاين**
 
-[![Download Native AppImage](https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_%D8%AA%D8%AD%D9%85%D9%8A%D9%84_%D8%A7%D9%84%D9%86%D8%B3%D8%AE%D8%A9_%D8%A7%D9%84%D8%A3%D8%B5%D9%84%D9%8A%D8%A9_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D9%84%D8%A9-Native_Qt6_AppImage_(v2.0.0)-d4af37?style=for-the-badge&logo=qt&logoColor=060a11)](https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest/download/Sirag-Atlas-Seerah-x86_64.AppImage)
+[![Download Native AppImage](https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_%D8%AA%D8%AD%D9%85%D9%8A%D9%84_%D8%A7%D9%84%D9%86%D8%B3%D8%AE%D8%A9_%D8%A7%D9%84%D8%A3%D8%B5%D9%84%D9%8A%D9%87_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D9%84%D8%A9-Native_Qt6_AppImage_(v2.0.1)-d4af37?style=for-the-badge&logo=qt&logoColor=060a11)](https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest/download/Sirag-Atlas-Seerah-x86_64.AppImage)
 [![Developer](https://img.shields.io/badge/%E2%9C%A8_%D8%AA%D9%85_%D8%A7%D9%84%D8%AA%D8%B7%D9%88%D9%8A%D8%B1_%D8%A8%D9%88%D8%A7%D8%B3%D8%B7%D8%A9-%D9%85%D8%AD%D9%85%D8%AF_%D8%B5%D9%84%D8%A7%D8%AD_%D8%B9%D8%A8%D8%AF_%D8%A7%D9%84%D8%AE%D8%A7%D9%84%D9%82-1e293b?style=for-the-badge)](https://elkatebmohamadsalah.blogspot.com/?m=1#google_vignette)
 
 </div>
@@ -24,7 +24,7 @@
 
 ## ⚡ التحميل والتشغيل الفوري
 
-1. حمّل الملف الجاهز مباشرة من زر التحميل أعلاه أو من قسم [**Releases (`v2.0.0`)**](https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest):
+1. حمّل الملف الجاهز مباشرة من زر التحميل أعلاه أو من قسم [**Releases (`v2.0.1`)**](https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest):
    - [**`Sirag-Atlas-Seerah-x86_64.AppImage`**](https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest/download/Sirag-Atlas-Seerah-x86_64.AppImage)
 
 2. شغّله فوراً بدبل-كليك من مدير الملفات (بعد تفعيل صلاحية التشغيل) أو عبر الطرفية:
