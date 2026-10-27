@@ -1,0 +1,13 @@
+{
+  "version": "1.2.0",
+  "versionCode": 3,
+  "releaseTag": "v1.2.0",
+  "publishedAt": "2026-10-27",
+  "appName": "سراج أطلس السيرة النبوية — نسخة لينكس",
+  "developer": "محمد صلاح عبد الخالق",
+  "developerUrl": "https://elkatebmohamadsalah.blogspot.com/?m=1#google_vignette",
+  "appImageUrl": "https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest/download/Sirag-Atlas-Seerah-x86_64.AppImage",
+  "liteAppImageUrl": "https://github.com/mosalah30688-gif/sirag-atlas-linux/releases/latest/download/Sirag-Atlas-Lite-x86_64.AppImage",
+  "apkUrl": "https://github.com/mosalah30688-gif/sirag-atlas/releases/latest/download/sirag-atlas-seerah.apk",
+  "changelog": "الإصدار 1.2.0 لسطح مكتب لينكس: حزمة AppImage مستقلة بالكامل تعمل بدون إنترنت مع قوائم عربية أصيلة وفاحص تحديثات حي."
+}

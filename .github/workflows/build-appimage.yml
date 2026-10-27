@@ -1,0 +1,63 @@
+name: Build & Publish Linux AppImage
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-appimage:
+    name: Build Standalone Linux AppImage (x86_64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Full Standalone Electron AppImage
+        run: npm run build:appimage
+
+      - name: Build Lightweight Portable AppImage
+        run: npm run build:lite
+
+      - name: Verify Built AppImages
+        run: ls -lh dist/Sirag-Atlas-Seerah-x86_64.AppImage dist/Sirag-Atlas-Lite-x86_64.AppImage
+
+      - name: Upload AppImage Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sirag-atlas-linux-appimages
+          path: |
+            dist/Sirag-Atlas-Seerah-x86_64.AppImage
+            dist/Sirag-Atlas-Lite-x86_64.AppImage
+
+      - name: Publish Ready-to-Run GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "سراج أطلس السيرة النبوية لنظام لينكس ${{ github.ref_name }} (AppImage)"
+          body: |
+            ## 🐧 سراج أطلس السيرة النبوية ﷺ — النسخة المكتبية الجاهزة لنظام لينكس (${{ github.ref_name }})
+            **✨ تم التطوير بواسطة محمد صلاح عبد الخالق**
+
+            ### ⬇️ التحميل والتشغيل الفوري (بدون تثبيت وبدون إنترنت):
+            1. **`Sirag-Atlas-Seerah-x86_64.AppImage`** *(النسخة الملكية الكاملة المستقلة بـ Electron — تعمل على جميع توزيعات لينكس مباشرة بدون أي متطلبات مسبقة)*.
+            2. **`Sirag-Atlas-Lite-x86_64.AppImage`** *(النسخة المحمولة فائقة الخفة — 3.2 MB)*.
+
+            ```bash
+            chmod +x Sirag-Atlas-Seerah-x86_64.AppImage
+            ./Sirag-Atlas-Seerah-x86_64.AppImage
+            ```
+          files: |
+            dist/Sirag-Atlas-Seerah-x86_64.AppImage
+            dist/Sirag-Atlas-Lite-x86_64.AppImage

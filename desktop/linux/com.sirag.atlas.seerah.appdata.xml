@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.sirag.atlas.seerah</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Sirag Atlas Seerah</name>
+  <name xml:lang="ar">سراج أطلس السيرة النبوية</name>
+  <summary>Interactive Chrono-Spatial Encyclopedia of the Prophetic Biography</summary>
+  <summary xml:lang="ar">الأطلس الزماني-المكاني التفاعلي لسيرة خير الأنام ﷺ</summary>
+  <developer id="com.sirag.atlas">
+    <name>Mohamed Salah Abdelkhalek (محمد صلاح عبد الخالق)</name>
+  </developer>
+  <description>
+    <p>
+      Sirag Atlas Seerah is an offline-capable Arabic interactive desktop encyclopedia covering the Prophetic Seerah:
+      chrono-spatial map synchronized with Quranic revelation, day-by-day Hijrah route, tactical battle simulator,
+      Al-Haramain architectural blueprints, Sahaba constellation, spoken classical Sahaba poetry diwan, 3D museum,
+      and 30-council Khatmah certificate studio.
+    </p>
+    <p xml:lang="ar">
+      سراج أطلس السيرة النبوية موسوعة مكتبية تفاعلية فخمة تعمل بالكامل بدون إنترنت، تضم الأطلس الزماني-المكاني ومزامن الوحي،
+      مسار الهجرة السرية وميدان الفرسان، محاكي الغزوات التكتيكي، معالم الحرمين، مجرة الصحابة، عمود النسب والشمائل،
+      ديوان القصائد المسموع بصوت عربي فصيح بدون موسيقى، المتحف ثلاثي الأبعاد، وختمة السيرة في 30 مجلساً.
+    </p>
+  </description>
+  <url type="homepage">https://elkatebmohamadsalah.blogspot.com/?m=1#google_vignette</url>
+  <url type="vcs-browser">https://github.com/mosalah30688-gif/sirag-atlas</url>
+  <launchable type="desktop-id">com.sirag.atlas.seerah.desktop</launchable>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="1.2.0" date="2026-10-27">
+      <description>
+        <p>Official Linux Desktop AppImage Edition + Responsive Design + Live GitHub Update Engine.</p>
+      </description>
+    </release>
+  </releases>
+</component>

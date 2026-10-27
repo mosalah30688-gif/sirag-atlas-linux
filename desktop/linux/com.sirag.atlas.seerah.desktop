@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Sirag Atlas Seerah
+Name[ar]=سراج أطلس السيرة النبوية
+GenericName=Prophetic Seerah Interactive Atlas
+GenericName[ar]=الأطلس الزماني-المكاني للسيرة النبوية ﷺ
+Comment=Interactive Chrono-Spatial Encyclopedia of the Prophetic Biography (Offline)
+Comment[ar]=موسوعة زمانية-مكانية تفاعلية للسيرة النبوية الشريفة تعمل بدون إنترنت — تم التطوير بواسطة محمد صلاح عبد الخالق
+Exec=sirag-atlas-seerah %U
+Icon=sirag-atlas-seerah
+Terminal=false
+Categories=Education;History;Literature;
+Keywords=Seerah;Sirag;Atlas;Islam;Prophet;السيرة;سراج;أطلس;الغزوات;الصحابة;
+StartupWMClass=sirag-atlas-seerah
+StartupNotify=true
