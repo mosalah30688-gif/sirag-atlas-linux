@@ -301,16 +301,16 @@ class SettingsAndUpdaterDialog(QDialog):
         lay.setContentsMargins(14, 14, 14, 14)
         lay.setSpacing(14)
 
-        hdr = QLabel(f"⚙️ إعدادات «سراج أطلس السيرة النبوية» (الإصدار الأصلي v{APP_VERSION})")
+        hdr = QLabel(f"⚙️ إعدادات «سراج أطلس السيرة النبوية» (v{APP_VERSION})")
         hdr.setProperty("role", "title")
         hdr.setWordWrap(True)
         lay.addWidget(hdr)
 
-        # 1. Live GitHub AppImage Updater
+        # 1. Live GitHub Updater
         upd_box = QFrame()
         upd_box.setProperty("panel", "glass")
         u_lay = QVBoxLayout(upd_box)
-        u_title = QLabel("🔄 التحديث المباشر من المستودع لنظام لينكس (AppImage)")
+        u_title = QLabel("🔄 التحديثات من المستودع")
         u_title.setStyleSheet("font-weight: bold;")
         u_lay.addWidget(u_title)
 
@@ -332,6 +332,12 @@ class SettingsAndUpdaterDialog(QDialog):
         self.dl_bar = QProgressBar()
         self.dl_bar.hide()
         u_lay.addWidget(self.dl_bar)
+
+        self.patch_btn = QPushButton("✨ تطبيق ملف التحديث المباشر الآن")
+        self.patch_btn.setProperty("btn", "gold")
+        self.patch_btn.hide()
+        self.patch_btn.clicked.connect(self._apply_live_patch)
+        u_lay.addWidget(self.patch_btn)
 
         self.dl_btn = QPushButton("⬇️ تنزيل أحدث نسخة AppImage مباشرة")
         self.dl_btn.clicked.connect(self._download_appimage)
@@ -452,15 +458,35 @@ class SettingsAndUpdaterDialog(QDialog):
         if not ok:
             self.upd_status.setText("⚠️ تعذر الاتصال بالمستودع حالياً — التطبيق يعمل بالكامل أوفلاين.")
             return
-        if _compare_semver(remote_ver, APP_VERSION) > 0:
-            msg = f"🔔 يتوفر إصدار جديد (v{remote_ver}): {changelog}"
+        current_ver = self.state.data.get("applied_patch_version", APP_VERSION)
+        if _compare_semver(remote_ver, current_ver) > 0:
+            self._pending_remote_ver = remote_ver
+            msg = f"🔔 يتوفر ملف تحديث جديد (v{remote_ver}): {changelog}"
             self.upd_status.setText(msg)
-            self.dl_btn.setText(f"⬇️ تنزيل وتثبيت التحديث الجديد الآن (v{remote_ver})")
-            self.dl_btn.setProperty("btn", "gold")
+            self.patch_btn.setText(f"✨ تطبيق ملف التحديث المباشر الآن (v{remote_ver})")
+            self.patch_btn.show()
             if self.notify_callback:
                 self.notify_callback(f"تحديث جديد متاح v{remote_ver}", changelog)
         else:
-            self.upd_status.setText(f"✅ أنت على أحدث إصدار متاح على المستودع (v{APP_VERSION}).")
+            self.upd_status.setText(f"✅ أنت على أحدث إصدار متاح على المستودع (v{current_ver}).")
+
+    def _apply_live_patch(self):
+        try:
+            req = urllib.request.Request(
+                f"https://raw.githubusercontent.com/{REPO_SLUG}/main/update.json",
+                headers={"User-Agent": "SiragAtlasUpdater/2.0"},
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                pdata = json.loads(resp.read().decode("utf-8"))
+            new_ver = pdata.get("version", getattr(self, "_pending_remote_ver", APP_VERSION))
+            self.state.data["applied_patch_version"] = new_ver
+            self.state.data["ui_overrides"] = pdata.get("uiOverrides", {})
+            self.state.save()
+            self.patch_btn.hide()
+            self.upd_status.setText(f"✅ تم تطبيق ملف التحديث (v{new_ver}) بنجاح دون إعادة بناء التطبيق.")
+            QMessageBox.information(self, "اكتمل التحديث", f"تم تطبيق ملف التحديث (v{new_ver}) بنجاح.")
+        except Exception as e:
+            self.upd_status.setText(f"⚠️ تعذر سحب ملف التحديث ({e}).")
 
     def _download_appimage(self):
         current_appimage = os.environ.get("APPIMAGE", "")
