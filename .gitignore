@@ -1,4 +1,8 @@
-node_modules/
+__pycache__/
+*.py[cod]
+build/
 dist/
+*.spec
+.venv/
+venv/
 .DS_Store
-*.log
